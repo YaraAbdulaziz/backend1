@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'account',
     'order',
-    'product'
+    'product',
+    'rest_framework.authtoken',
+    'drb',
+    'event'
 ]
 
 MEDIA_URL = 'media/'
