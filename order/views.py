@@ -5,7 +5,7 @@ from typing import OrderedDict
 from django.shortcuts import get_object_or_404, render
 from rest_framework.decorators import api_view
 from account.models import *
-from order.serializer import OrderSerializer, OrdrItemSerializer
+from order.serializer import OrdrItemSerializer
 from product.serializer import *
 from rest_framework.response import Response
 from .models import *
@@ -28,19 +28,20 @@ def get_cart_usr(request,pk):
 @csrf_exempt
 def add_to_cart(request, pk):
     item = get_object_or_404(Product, id=pk)
+    print(item)
     order = Order.objects.filter(owner=request.user.profile, is_ordered=False).first()
+    print(order)
     order_item = OrderItem.objects.filter(
         product=item,
         refrence_id=order.id
     )
+    print(order_item)
     serializer = OrdrItemSerializer(data=order_item)
     serializer.is_valid(raise_exception=False)
+    print(order_item)
     if order_item.exists():
-        serializer.update()
-        # o
-        # rder_item.update()
-        # order_item.quantity +=1
-        # order_item.save()
+        order_item.quantity +=1
+        order_item.save()
         return Response(serializer.data)
     else:
         order_item.add(item)
